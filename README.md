@@ -1,38 +1,36 @@
-# Swapify — Learn & Teach Platform
+# Swapify
 
-This is a full-stack minimal implementation scaffold for **Swapify**, a skill-exchange platform.
+A skill exchange platform where users can teach and learn from each other.
 
-## Project Structure
-- swapify-backend/  — Node.js + Express API
-- swapify-frontend/ — React frontend (Create React App-like structure)
+## Features
 
-## Features included (basic implementation)
-- User registration & login (JWT, bcrypt)
-- User profile with skills they can teach / want to learn
-- Browse skills
-- Send/Accept/Reject swap requests
-- Simple dashboard
+- User authentication
+- Skill matching system
+- Real-time feedback
+- Contact form for developer support
+- Developer dashboard for managing feedback
 
 ## Setup
 
 ### Backend
-1. `cd swapify-backend`
-2. Create a `.env` file with:
+```bash
+cd swapify-backend
+npm install
+npm start
 ```
-MONGO_URI=<your_mongodb_connection_string>
-JWT_SECRET=swapify_secret
-PORT=5000
-```
-3. `npm install`
-4. `npm run dev` (uses nodemon) or `npm start`
 
 ### Frontend
-1. `cd swapify-frontend`
-2. `npm install`
-3. `npm start` (runs on port 3000)
+```bash
+cd swapify-frontend
+npm install
+npm start
+```
 
-You may host backend on Render/Heroku and frontend on Vercel/Netlify. Use MongoDB Atlas for database.
+## Developer Access
+- Email: supports@swapify.com
+- Password: supports@swapify.com
 
-This scaffold is intended for educational / evaluation purposes and can be extended.
-
-Authors: Srishti Rao, Shwetha S, Spoorthi T
+## Technologies Used
+- Frontend: React.js
+- Backend: Node.js, Express
+- Database: MongoDB
