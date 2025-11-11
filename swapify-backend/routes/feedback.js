@@ -3,6 +3,8 @@ const router = express.Router();
 const Feedback = require('../models/Feedback');
 const auth = require('../middleware/auth');
 const developer = require('../middleware/developer');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'swapify_secret';
 
 // Submit feedback (handles both user feedback and contact feedback)
 router.post('/submit', async (req, res) => {
@@ -23,7 +25,7 @@ router.post('/submit', async (req, res) => {
         isContactFeedback: true
       });
     } else {
-      // User feedback
+      // User feedback — require and verify JWT from Authorization header
       if (!toUserId || !rating || !message) {
         return res.status(400).json({ msg: 'Missing required fields' });
       }
@@ -32,8 +34,19 @@ router.post('/submit', async (req, res) => {
         return res.status(400).json({ msg: 'Rating must be between 1 and 5' });
       }
 
+      const bearer = req.header('Authorization');
+      if (!bearer) return res.status(401).json({ msg: 'Authentication required' });
+      const token = bearer.split(' ')[1];
+      let fromUserId;
+      try {
+        const payload = jwt.verify(token, JWT_SECRET);
+        fromUserId = payload.id;
+      } catch (err) {
+        return res.status(401).json({ msg: 'Invalid token' });
+      }
+
       feedback = new Feedback({
-        fromUser: req.user._id,
+        fromUser: fromUserId,
         toUser: toUserId,
         rating,
         message,
@@ -43,7 +56,9 @@ router.post('/submit', async (req, res) => {
     }
 
     await feedback.save();
-    res.json({ msg: 'Feedback submitted successfully' });
+    console.log('Saved feedback:', feedback);
+    // Return created feedback so frontend can show it immediately
+    res.json({ msg: 'Feedback submitted successfully', feedback });
   } catch (e) {
     console.error(e);
     res.status(500).json({ msg: 'Server error' });

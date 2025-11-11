@@ -12,7 +12,15 @@ export default function DeveloperDashboard({ token }) {
   async function loadFeedbacks() {
     try {
       const res = await api('/feedback/contact-feedback', 'GET', null, token);
-      setFeedbacks(res);
+      // Filter out placeholder/generic submissions so developers don't see the generic "User" entries
+      const filtered = (res || []).filter(f => {
+        // exclude the specific placeholder values used by the contact form when name/email are hard-coded
+        if (!f) return false;
+        const nameIsPlaceholder = f.name === 'User';
+        const emailIsPlaceholder = f.email === 'user@example.com';
+        return !(nameIsPlaceholder && emailIsPlaceholder);
+      });
+      setFeedbacks(filtered);
     } catch (err) {
       console.error(err);
     }

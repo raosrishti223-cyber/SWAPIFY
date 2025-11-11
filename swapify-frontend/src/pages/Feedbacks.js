@@ -13,7 +13,20 @@ export default function Feedbacks({ token, onBack }) {
   async function loadFeedbacks() {
     try {
       const res = await api('/feedback/all', 'GET', null, token);
-      setFeedbacks(res);
+      // Show only contact-form feedbacks that are anonymous to regular users.
+      // This hides named contact submissions (e.g. 'swap', 'B') from the public feedback list.
+      const filtered = (res || []).filter(f => {
+        if (!f) return false;
+        // must be contact feedback
+        if (!f.isContactFeedback) return false;
+        // consider anonymous when name is missing or placeholder values were used
+        const name = (f.name || '').trim();
+        const email = (f.email || '').trim();
+        const isPlaceholderName = !name || name.toLowerCase() === 'user' || name.toLowerCase() === 'anonymous';
+        const isPlaceholderEmail = !email || email === 'user@example.com';
+        return isPlaceholderName || isPlaceholderEmail;
+      });
+      setFeedbacks(filtered);
     } catch (err) {
       console.error(err);
     } finally {
