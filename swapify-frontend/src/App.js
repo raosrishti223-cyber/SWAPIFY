@@ -14,7 +14,7 @@ function App(){
   const [page, setPage] = useState('login');
   const [userRole, setUserRole] = useState('');
   const [loading, setLoading] = useState(true);
-
+//this function is caalled whenever the token changes
   useEffect(() => {
     async function checkAuth() {
       if(token) {
