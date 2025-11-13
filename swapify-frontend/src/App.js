@@ -68,12 +68,13 @@ function App(){
     if (page === 'register') {
       return <Register switchToLogin={() => gotoPage('login')} />;
     }
-    if (page === 'about') {
-      return <About onBack={goBack} />;
-    }
-    if (page === 'contact') {
-      return <Contact onBack={goBack} />;
-    }
+
+    // if (page === 'about') {
+    //   return <About onBack={goBack} />;
+    // }
+    // if (page === 'contact') {
+    //   return <Contact onBack={goBack} />;
+    // }
     // For any other page, redirect to login
     return <Login onLogin={(t) => setToken(t)} switchToRegister={() => gotoPage('register')} />;
   }
